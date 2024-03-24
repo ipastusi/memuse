@@ -3,22 +3,20 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-void *memory;
+static void *memory;
 
-void allocate(size_t mb);
+static void allocate(size_t mb, int sec);
 
-void unallocate(void);
-
-void sleeps(int s);
+static void unallocate(void);
 
 int main(void) {
     size_t mb = 1000;
-    allocate(mb);
-    sleeps(10);
+    int sec = 10;
+    allocate(mb, sec);
     unallocate();
 }
 
-void allocate(size_t mb) {
+static void allocate(size_t mb, int sec) {
     printf("allocating memory size: %zuMB\n", mb);
     size_t bytes = mb * 1024 * 1024;
     memory = malloc(bytes);
@@ -28,15 +26,13 @@ void allocate(size_t mb) {
         puts("memory allocation error");
         exit(1);
     }
+
+    printf("sleeping: %ds\n", sec);
+    sleep(sec);
 }
 
-void unallocate(void) {
+static void unallocate(void) {
     puts("unallocating memory");
     free(memory);
     memory = NULL;
-}
-
-void sleeps(int s) {
-    printf("sleeping: %ds\n", s);
-    sleep(s);
 }
