@@ -3,23 +3,40 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-int main(void) {
-    puts("start");
+void *memory;
 
-    void *memory;
-    size_t size = 1000 * 1024 * 1024;
-    memory = malloc(size);
-    mlock(memory, size);
+void allocate(size_t mb);
+
+void unallocate(void);
+
+void sleeps(int s);
+
+int main(void) {
+    size_t mb = 1000;
+    allocate(mb);
+    sleeps(10);
+    unallocate();
+}
+
+void allocate(size_t mb) {
+    printf("allocating memory size: %zuMB\n", mb);
+    size_t bytes = mb * 1024 * 1024;
+    memory = malloc(bytes);
+    mlock(memory, bytes);
 
     if (memory == NULL) {
-        puts("Memory allocation error");
+        puts("memory allocation error");
         exit(1);
     }
+}
 
-    sleep(10);
-
+void unallocate(void) {
+    puts("unallocating memory");
     free(memory);
     memory = NULL;
+}
 
-    puts("end");
+void sleeps(int s) {
+    printf("sleeping: %ds\n", s);
+    sleep(s);
 }
