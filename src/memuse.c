@@ -1,7 +1,9 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include "config.h"
 
 static void *memory;
 
@@ -10,14 +12,23 @@ static void allocate(size_t mb, int sec);
 static void unallocate(void);
 
 int main(void) {
-    size_t mb = 1000;
-    int sec = 10;
-    allocate(mb, sec);
-    unallocate();
+    alloc_unit *cfg = parse("1:1|2:1|3:1");
+    alloc_unit *current = cfg;
+
+    while (true) {
+        allocate(current->mb, current->sec);
+        unallocate();
+
+        if (current->next != NULL) {
+            current = current->next;
+        } else {
+            break;
+        }
+    }
 }
 
 static void allocate(size_t mb, int sec) {
-    printf("allocating memory size: %zuMB\n", mb);
+    printf("allocating memory size: %zuMB for %ds\n", mb, sec);
     size_t bytes = mb * 1024 * 1024;
     memory = malloc(bytes);
     mlock(memory, bytes);
@@ -26,8 +37,6 @@ static void allocate(size_t mb, int sec) {
         puts("memory allocation error");
         exit(1);
     }
-
-    printf("sleeping: %ds\n", sec);
     sleep(sec);
 }
 
