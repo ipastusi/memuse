@@ -4,8 +4,8 @@
 #define MAX_CFG_SIZE 101
 
 typedef struct alloc_unit {
-    int mb;
-    int sec;
+    unsigned int mb;
+    unsigned int sec;
     struct alloc_unit *next;
 } alloc_unit;
 

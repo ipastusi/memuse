@@ -7,7 +7,7 @@
 
 static void *memory;
 
-static void allocate(size_t mb, int sec);
+static void allocate(unsigned int mb, unsigned int sec);
 
 static void unallocate(void);
 
@@ -27,9 +27,9 @@ int main(void) {
     }
 }
 
-static void allocate(size_t mb, int sec) {
-    printf("allocating memory size: %zuMB for %ds\n", mb, sec);
-    size_t bytes = mb * 1024 * 1024;
+static void allocate(unsigned int mb, unsigned int sec) {
+    printf("allocating memory size: %uMB for %us\n", mb, sec);
+    unsigned int bytes = mb * 1024 * 1024;
     memory = malloc(bytes);
     mlock(memory, bytes);
 

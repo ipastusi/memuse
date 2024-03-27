@@ -16,7 +16,7 @@ alloc_unit *parse(char *cfg) {
     char *token = strtok(in, delim);
     while (token != NULL) {
         alloc_unit *new_au = get_new_au();
-        int res = sscanf(token, "%d:%d", &new_au->mb, &new_au->sec);
+        int res = sscanf(token, "%u:%u", &new_au->mb, &new_au->sec);
 
         if (res != 2) {
             puts("incorrect format");

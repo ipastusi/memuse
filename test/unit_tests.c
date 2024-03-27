@@ -16,14 +16,14 @@ int main(void) {
 
 static char *to_str(alloc_unit *au) {
     static char out[MAX_CFG_SIZE];
-    snprintf(out, MAX_AU_SIZE, "%d:%d", au->mb, au->sec);
+    snprintf(out, MAX_AU_SIZE, "%u:%u", au->mb, au->sec);
 
     while (au->next != NULL) {
         au = au->next;
         strlcat(out, "|", MAX_CFG_SIZE);
 
         char current[MAX_AU_SIZE];
-        snprintf(current, MAX_AU_SIZE, "%d:%d", au->mb, au->sec);
+        snprintf(current, MAX_AU_SIZE, "%u:%u", au->mb, au->sec);
         strlcat(out, current, MAX_CFG_SIZE);
     }
     printf("result: %s", out);
