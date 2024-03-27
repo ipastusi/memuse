@@ -16,11 +16,23 @@ alloc_unit *parse(char *cfg) {
     char *token = strtok(in, delim);
     while (token != NULL) {
         alloc_unit *new_au = get_new_au();
-        int res = sscanf(token, "%u:%u", &new_au->mb, &new_au->sec);
+        if (new_au == NULL) return NULL;
+
+        int *a = malloc(sizeof(int));
+        int *b = malloc(sizeof(int));
+        int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
             puts("incorrect format");
-            exit(1);
+            return NULL;
+        }
+
+        if (*a < 0 || *b < 0) {
+            printf("negative value detected: %d %d\n", *a, *b);
+            return NULL;
+        } else {
+            new_au->mb = *a;
+            new_au->sec = *b;
         }
 
         if (first_au == NULL) {
@@ -40,7 +52,7 @@ static alloc_unit *get_new_au(void) {
     alloc_unit *au = malloc(sizeof(alloc_unit));
     if (au == NULL) {
         puts("memory allocation error");
-        exit(1);
+        return NULL;
     }
     au->next = NULL;
     return au;

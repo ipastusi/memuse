@@ -13,6 +13,7 @@ static void unallocate(void);
 
 int main(void) {
     alloc_unit *cfg = parse("1:1|2:1|3:1");
+    if (cfg == NULL) exit(1);
     alloc_unit *current = cfg;
 
     while (true) {

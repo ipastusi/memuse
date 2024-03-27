@@ -12,6 +12,10 @@ int main(void) {
     alloc_unit *au = parse(in);
     char *out = to_str(au);
     assert(strcmp(in, out) == 0);
+
+    char in2[] = "-1:1";
+    alloc_unit *au2 = parse(in2);
+    assert(au2 == NULL);
 }
 
 static char *to_str(alloc_unit *au) {
@@ -26,6 +30,6 @@ static char *to_str(alloc_unit *au) {
         snprintf(current, MAX_AU_SIZE, "%u:%u", au->mb, au->sec);
         strlcat(out, current, MAX_CFG_SIZE);
     }
-    printf("result: %s", out);
+    printf("result: %s\n", out);
     return out;
 }
