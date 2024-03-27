@@ -16,6 +16,10 @@ int main(void) {
     char in2[] = "-1:1";
     alloc_unit *au2 = parse(in2);
     assert(au2 == NULL);
+
+    char in3[] = "";
+    alloc_unit *au3 = parse(in3);
+    assert(au3 == NULL);
 }
 
 static char *to_str(alloc_unit *au) {

@@ -45,6 +45,7 @@ alloc_unit *parse(char *cfg) {
 
         token = strtok(NULL, delim);
     }
+    if (first_au == NULL) puts("parsed config is empty");
     return first_au;
 }
 
