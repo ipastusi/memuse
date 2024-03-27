@@ -5,21 +5,33 @@
 
 #define MAX_AU_SIZE 10
 
+static void is_equal(char *in);
+
+static void is_null(char *in);
+
 static char *to_str(alloc_unit *au);
 
 int main(void) {
-    char in[] = "1000:10|20:2|30:3";
+    is_equal("1000:10");
+    is_equal("1000:10|20:2|30:3");
+    is_null("-1:1");
+    is_null("");
+    is_null(":");
+    is_null("1:");
+    is_null(":1");
+    is_null("1:a");
+    is_null("1:-");
+}
+
+static void is_equal(char *in) {
     alloc_unit *au = parse(in);
     char *out = to_str(au);
     assert(strcmp(in, out) == 0);
+}
 
-    char in2[] = "-1:1";
-    alloc_unit *au2 = parse(in2);
-    assert(au2 == NULL);
-
-    char in3[] = "";
-    alloc_unit *au3 = parse(in3);
-    assert(au3 == NULL);
+static void is_null(char *in) {
+    alloc_unit *au5 = parse(in);
+    assert(au5 == NULL);
 }
 
 static char *to_str(alloc_unit *au) {

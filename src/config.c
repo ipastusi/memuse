@@ -23,7 +23,7 @@ alloc_unit *parse(char *cfg) {
         int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
-            puts("incorrect format");
+            printf("incorrect format: %s\n", token);
             return NULL;
         }
 
