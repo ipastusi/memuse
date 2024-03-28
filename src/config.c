@@ -47,6 +47,11 @@ alloc_unit *parse(char *cfg) {
             return NULL;
         }
 
+        free(a);
+        free(b);
+        a = NULL;
+        b = NULL;
+
         if (first_au == NULL) {
             first_au = new_au;
             last_au = first_au;
