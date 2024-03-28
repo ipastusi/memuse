@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include "config.h"
 
+static alloc_unit *cfg;
 static void *memory;
 static bool allocated = false;
 
@@ -13,12 +14,12 @@ static void allocate(unsigned int mb, unsigned int sec);
 
 static void unallocate(void);
 
-void int_handler(int sig);
+static void int_handler(int sig);
 
 int main(void) {
     signal(SIGINT, int_handler);
 
-    alloc_unit *cfg = parse("1000:30|2:1|3:1");
+    cfg = parse("1:1|2:1|3:1");
     if (cfg == NULL) exit(2);
     alloc_unit *current = cfg;
 
@@ -32,6 +33,7 @@ int main(void) {
             break;
         }
     }
+    unallocate_cfg(cfg);
 }
 
 static void allocate(unsigned int mb, unsigned int sec) {
@@ -56,9 +58,10 @@ static void unallocate(void) {
     allocated = false;
 }
 
-void int_handler(int sig) {
+static void int_handler(int sig) {
     printf("\nreceived signal: %d\n", sig);
     if (allocated) unallocate();
+    unallocate_cfg(cfg);
     puts("exiting...");
     exit(1);
 }

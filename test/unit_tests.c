@@ -37,18 +37,21 @@ int main(void) {
 static void is_equal(char *in) {
     alloc_unit *au = parse(in);
     char *out = to_str(au);
+    unallocate_cfg(au);
     assert(strcmp(in, out) == 0);
 }
 
 static void is_equal_to(char *in, char *exp) {
     alloc_unit *au = parse(in);
     char *out = to_str(au);
+    unallocate_cfg(au);
     assert(strcmp(exp, out) == 0);
 }
 
 static void is_null(char *in) {
     alloc_unit *au = parse(in);
     assert(au == NULL);
+    unallocate_cfg(au);
 }
 
 static char *to_str(alloc_unit *au) {

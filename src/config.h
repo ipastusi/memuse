@@ -11,4 +11,6 @@ typedef struct alloc_unit {
 
 alloc_unit *parse(char *cfg);
 
+void unallocate_cfg(alloc_unit *cfg);
+
 #endif

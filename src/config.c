@@ -5,6 +5,10 @@
 
 static alloc_unit *get_new_au(void);
 
+static int *allocate_int(void);
+
+static void free_int(int *i);
+
 alloc_unit *parse(char *cfg) {
     if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
         printf("input too long (%lu): %s\n", strlen(cfg), cfg);
@@ -23,8 +27,8 @@ alloc_unit *parse(char *cfg) {
         alloc_unit *new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *a = malloc(sizeof(int));
-        int *b = malloc(sizeof(int));
+        int *a = allocate_int();
+        int *b = allocate_int();
         int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
@@ -47,10 +51,8 @@ alloc_unit *parse(char *cfg) {
             return NULL;
         }
 
-        free(a);
-        free(b);
-        a = NULL;
-        b = NULL;
+        free_int(a);
+        free_int(b);
 
         if (first_au == NULL) {
             first_au = new_au;
@@ -66,6 +68,16 @@ alloc_unit *parse(char *cfg) {
     return first_au;
 }
 
+void unallocate_cfg(alloc_unit *cfg) {
+    alloc_unit *current = cfg;
+    while (current != NULL) {
+        alloc_unit *prev = current;
+        current = current->next;
+        free(prev);
+        prev = NULL;
+    }
+}
+
 static alloc_unit *get_new_au(void) {
     alloc_unit *au = malloc(sizeof(alloc_unit));
     if (au == NULL) {
@@ -74,4 +86,18 @@ static alloc_unit *get_new_au(void) {
     }
     au->next = NULL;
     return au;
+}
+
+static int *allocate_int(void) {
+    int *i = malloc(sizeof(int));
+    if (i == NULL) {
+        puts("memory allocation error");
+        return NULL;
+    }
+    return i;
+}
+
+static void free_int(int *i) {
+    free(i);
+    i = NULL;
 }
