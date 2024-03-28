@@ -6,6 +6,11 @@
 static alloc_unit *get_new_au(void);
 
 alloc_unit *parse(char *cfg) {
+    if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
+        printf("input too long (%lu): %s\n", strlen(cfg), cfg);
+        return NULL;
+    }
+
     char in[MAX_CFG_SIZE];
     strncpy(in, cfg, MAX_CFG_SIZE);
 
@@ -28,7 +33,7 @@ alloc_unit *parse(char *cfg) {
         }
 
         if (*a < 0 || *b < 0) {
-            printf("negative value detected: %d %d\n", *a, *b);
+            printf("negative value: %d %d\n", *a, *b);
             return NULL;
         } else {
             new_au->mb = *a;

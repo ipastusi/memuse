@@ -14,6 +14,8 @@ static char *to_str(alloc_unit *au);
 int main(void) {
     is_equal("1000:10");
     is_equal("1000:10|20:2|30:3");
+    is_equal("10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:1");
+    is_null("10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10|10:10");
     is_null("-1:1");
     is_null("");
     is_null(":");
@@ -21,6 +23,8 @@ int main(void) {
     is_null(":1");
     is_null("1:a");
     is_null("1:-");
+    is_null("1");
+    is_null("a1:2");
 }
 
 static void is_equal(char *in) {
@@ -30,8 +34,8 @@ static void is_equal(char *in) {
 }
 
 static void is_null(char *in) {
-    alloc_unit *au5 = parse(in);
-    assert(au5 == NULL);
+    alloc_unit *au = parse(in);
+    assert(au == NULL);
 }
 
 static char *to_str(alloc_unit *au) {
