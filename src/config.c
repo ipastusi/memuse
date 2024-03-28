@@ -40,6 +40,13 @@ alloc_unit *parse(char *cfg) {
             new_au->sec = *b;
         }
 
+        char *au_str;
+        res = asprintf(&au_str, "%u:%u", *a, *b);
+        if (res == -1 || strcmp(token, au_str) != 0) {
+            printf("incorrect format: %s\n", token);
+            return NULL;
+        }
+
         if (first_au == NULL) {
             first_au = new_au;
             last_au = first_au;

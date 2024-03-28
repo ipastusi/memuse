@@ -7,6 +7,8 @@
 
 static void is_equal(char *in);
 
+static void is_equal_to(char *in, char *exp);
+
 static void is_null(char *in);
 
 static char *to_str(alloc_unit *au);
@@ -25,12 +27,23 @@ int main(void) {
     is_null("1:-");
     is_null("1");
     is_null("a1:2");
+    is_null("1:2a");
+    is_null("1:2:");
+    is_null("1:2::");
+    is_equal_to("1:2|", "1:2");
+    is_equal_to("1:2||", "1:2");
 }
 
 static void is_equal(char *in) {
     alloc_unit *au = parse(in);
     char *out = to_str(au);
     assert(strcmp(in, out) == 0);
+}
+
+static void is_equal_to(char *in, char *exp) {
+    alloc_unit *au = parse(in);
+    char *out = to_str(au);
+    assert(strcmp(exp, out) == 0);
 }
 
 static void is_null(char *in) {
