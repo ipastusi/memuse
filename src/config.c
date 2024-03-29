@@ -9,7 +9,7 @@ static int *allocate_int(void);
 
 static void free_int(int *i);
 
-alloc_unit *parse(char *cfg) {
+alloc_unit *parse(const char *const cfg) {
     if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
         printf("input too long (%lu): %s\n", strlen(cfg), cfg);
         return NULL;
@@ -18,17 +18,17 @@ alloc_unit *parse(char *cfg) {
     char in[MAX_CFG_SIZE];
     strncpy(in, cfg, MAX_CFG_SIZE);
 
-    char delim[] = "|";
+    const char delim[] = "|";
     alloc_unit *first_au = NULL;
     alloc_unit *last_au = NULL;
 
     char *token = strtok(in, delim);
     while (token != NULL) {
-        alloc_unit *new_au = get_new_au();
+        alloc_unit *const new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *a = allocate_int();
-        int *b = allocate_int();
+        int *const a = allocate_int();
+        int *const b = allocate_int();
         int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
@@ -40,7 +40,7 @@ alloc_unit *parse(char *cfg) {
             printf("negative value: %d %d\n", *a, *b);
             return NULL;
         } else {
-            new_au->mb = *a;
+            new_au->size = *a;
             new_au->sec = *b;
         }
 

@@ -10,7 +10,7 @@ static alloc_unit *cfg;
 static void *memory;
 static bool allocated = false;
 
-static void allocate(unsigned int mb, unsigned int sec);
+static void allocate(unsigned int size, unsigned int sec, bool is_mb);
 
 static void unallocate(void);
 
@@ -19,12 +19,13 @@ static void int_handler(int sig);
 int main(void) {
     signal(SIGINT, int_handler);
 
+    const bool is_mb = 0;
     cfg = parse("1:1|2:1|3:1");
     if (cfg == NULL) exit(2);
     alloc_unit *current = cfg;
 
     while (true) {
-        allocate(current->mb, current->sec);
+        allocate(current->size, current->sec, is_mb);
         unallocate();
 
         if (current->next != NULL) {
@@ -36,9 +37,10 @@ int main(void) {
     unallocate_cfg(cfg);
 }
 
-static void allocate(unsigned int mb, unsigned int sec) {
-    printf("allocating memory size: %uMB for %us\n", mb, sec);
-    unsigned int bytes = mb * 1024 * 1024;
+static void allocate(const unsigned int size, const unsigned int sec, const bool is_mb) {
+    const unsigned int bytes = is_mb ? size * 1000 * 1000 : size * 1024 * 1024;
+    const char* const unit = is_mb ? "MB" : "MiB";
+    printf("allocating memory size: %u%s for %us\n", size, unit, sec);
     memory = malloc(bytes);
     allocated = true;
 
@@ -58,7 +60,7 @@ static void unallocate(void) {
     allocated = false;
 }
 
-static void int_handler(int sig) {
+static void int_handler(const int sig) {
     printf("\nreceived signal: %d\n", sig);
     if (allocated) unallocate();
     unallocate_cfg(cfg);
