@@ -8,7 +8,7 @@ static alloc_unit *get_new_au(void);
 
 alloc_unit *parse(const char *const cfg, const bool wrap) {
     if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
-        printf("input too long (%lu): %s\n", strlen(cfg), cfg);
+        fprintf(stderr, "input too long (%lu): %s\n", strlen(cfg), cfg);
         return NULL;
     }
 
@@ -31,12 +31,12 @@ alloc_unit *parse(const char *const cfg, const bool wrap) {
         int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
-            printf("incorrect format: %s\n", token);
+            fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
         }
 
         if (*a < 0 || *b < 0) {
-            printf("negative value: %d %d\n", *a, *b);
+            fprintf(stderr, "negative value: %d %d\n", *a, *b);
             return NULL;
         } else {
             new_au->size = *a;
@@ -46,7 +46,7 @@ alloc_unit *parse(const char *const cfg, const bool wrap) {
         char *au_str;
         res = asprintf(&au_str, "%u:%u", *a, *b);
         if (res == -1 || strcmp(token, au_str) != 0) {
-            printf("incorrect format: %s\n", token);
+            fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
         }
 
@@ -62,7 +62,7 @@ alloc_unit *parse(const char *const cfg, const bool wrap) {
     }
 
     if (first_au == NULL) {
-        printf("parsed config is empty\n");
+        fprintf(stderr, "parsed config is empty\n");
     } else {
         first_au->units = units;
         if (wrap) last_au->next = first_au;
@@ -85,7 +85,7 @@ void unallocate_cfg(alloc_unit *cfg) {
 static alloc_unit *get_new_au(void) {
     alloc_unit *au = malloc(sizeof(alloc_unit));
     if (au == NULL) {
-        printf("memory allocation error\n");
+        fprintf(stderr, "memory allocation error\n");
         return NULL;
     }
     au->next = NULL;

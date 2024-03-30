@@ -48,13 +48,13 @@ static int allocate(const unsigned int size, const unsigned int sec, const bool 
     memory = malloc(bytes);
 
     if (memory == NULL) {
-        printf("memory allocation error\n");
+        fprintf(stderr, "memory allocation error\n");
         return EXIT_FAILURE;
     }
 
     allocated = true;
     if (mlock(memory, bytes) == -1) {
-        printf("memory locking error\n");
+        fprintf(stderr, "memory locking error\n");
         return EXIT_FAILURE;
     }
     sleep(sec);
@@ -69,9 +69,9 @@ static void unallocate(void) {
 }
 
 static void int_handler(const int sig) {
-    printf("\nreceived signal: %d\n", sig);
+    fprintf(stderr, "\nreceived signal: %d\n", sig);
     if (allocated) unallocate();
     unallocate_cfg(cfg);
-    printf("exiting...\n");
+    fprintf(stderr, "exiting...\n");
     exit(EXIT_FAILURE);
 }
