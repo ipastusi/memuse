@@ -62,7 +62,7 @@ alloc_unit *parse(const char *const cfg, const bool wrap) {
     }
 
     if (first_au == NULL) {
-        puts("parsed config is empty");
+        printf("parsed config is empty\n");
     } else {
         first_au->units = units;
         if (wrap) last_au->next = first_au;
@@ -85,7 +85,7 @@ void unallocate_cfg(alloc_unit *cfg) {
 static alloc_unit *get_new_au(void) {
     alloc_unit *au = malloc(sizeof(alloc_unit));
     if (au == NULL) {
-        puts("memory allocation error");
+        printf("memory allocation error\n");
         return NULL;
     }
     au->next = NULL;
