@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -5,6 +6,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include "config.h"
+
+#define VERSION "1.0.0"
 
 static alloc_unit *cfg;
 static void *memory;
@@ -18,13 +21,50 @@ static void unallocate(void);
 
 static void int_handler(int sig);
 
-int main(void) {
+int main(int argc, char **argv) {
+    const char *cfg_str = NULL;
+    bool is_mb = false;
+    bool wrap = false;
+
+    int c;
+    while ((c = getopt(argc, argv, "mwc:vh")) != -1) {
+        switch (c) {
+            case 'm':
+                is_mb = true;
+                break;
+            case 'w':
+                wrap = true;
+                break;
+            case 'c':
+                cfg_str = optarg;
+                break;
+            case 'v':
+                printf("memuse %s\n", VERSION);
+                exit(EXIT_SUCCESS);
+            case 'h':
+                printf("memuse %s\n", VERSION);
+                printf("\n");
+                printf("-c      Memory allocation config\n");
+                printf("-h      Print this help screen\n");
+                printf("-m      Use MB instead of MiB\n");
+                printf("-v      Print version info\n");
+                printf("-w      Wrap around and run in endless loop\n");
+                printf("\n");
+                printf("Examples:\n");
+                printf("memuse -c '100:10|200:20'       Allocate 100MiB for 10 seconds, 200MiB for 20 seconds\n");
+                printf("memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 seconds, repeat the sequence until interrupted\n");
+                printf("memuse -c '100:10' -m           Allocate 100MB for 10 seconds\n");
+                exit(EXIT_SUCCESS);
+            default:
+                exit(EXIT_FAILURE);
+        }
+    }
+    if (cfg_str == NULL) {
+        fprintf(stderr, "option -c undefined\n");
+        exit(EXIT_FAILURE);
+    }
+
     signal(SIGINT, int_handler);
-
-    const char cfg_str[] = "1:1|2:1|3:1";
-    const bool is_mb = 0;
-    const bool wrap = false;
-
     run(cfg_str, is_mb, wrap);
 }
 
