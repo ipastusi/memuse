@@ -66,11 +66,11 @@ static char *to_str(alloc_unit *au) {
     unsigned int units = au->units;
     for (unsigned int i = 1; i < units; i++) {
         au = au->next;
-        strlcat(out, "|", MAX_CFG_SIZE);
+        strncat(out, "|", MAX_CFG_SIZE);
 
         char current[MAX_AU_SIZE];
         snprintf(current, MAX_AU_SIZE, "%u:%u", au->size, au->sec);
-        strlcat(out, current, MAX_CFG_SIZE);
+        strncat(out, current, MAX_CFG_SIZE - 1);
     }
     printf("result: %s\n", out);
     return out;

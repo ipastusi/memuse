@@ -1,4 +1,4 @@
-#include <ctype.h>
+#include <getopt.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -12,6 +12,10 @@
 static alloc_unit *cfg;
 static void *memory;
 static bool allocated = false;
+
+static void help(void);
+
+static void version(void);
 
 static int run(const char *cfg_str, bool is_mb, bool wrap);
 
@@ -39,33 +43,42 @@ int main(int argc, char **argv) {
                 cfg_str = optarg;
                 break;
             case 'v':
-                printf("memuse %s\n", VERSION);
+                version();
                 exit(EXIT_SUCCESS);
             case 'h':
-                printf("memuse %s\n", VERSION);
-                printf("\n");
-                printf("-c      Memory allocation config\n");
-                printf("-h      Print this help screen\n");
-                printf("-m      Use MB instead of MiB\n");
-                printf("-v      Print version info\n");
-                printf("-w      Wrap around and run in endless loop\n");
-                printf("\n");
-                printf("Examples:\n");
-                printf("memuse -c '100:10|200:20'       Allocate 100MiB for 10 seconds, 200MiB for 20 seconds\n");
-                printf("memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 seconds, repeat the sequence until interrupted\n");
-                printf("memuse -c '100:10' -m           Allocate 100MB for 10 seconds\n");
+                help();
                 exit(EXIT_SUCCESS);
             default:
+                help();
                 exit(EXIT_FAILURE);
         }
     }
     if (cfg_str == NULL) {
-        fprintf(stderr, "option -c undefined\n");
+        help();
         exit(EXIT_FAILURE);
     }
 
     signal(SIGINT, int_handler);
     run(cfg_str, is_mb, wrap);
+}
+
+static void help(void) {
+    version();
+    printf("\n");
+    printf("-c      Memory allocation config\n");
+    printf("-h      Print this help screen\n");
+    printf("-m      Use MB instead of MiB\n");
+    printf("-v      Print version info\n");
+    printf("-w      Wrap around and run in endless loop\n");
+    printf("\n");
+    printf("Examples:\n");
+    printf("memuse -c '100:10|200:20'       Allocate 100MiB for 10 seconds, 200MiB for 20 seconds\n");
+    printf("memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 seconds, repeat the sequence until interrupted\n");
+    printf("memuse -c '100:10' -m           Allocate 100MB for 10 seconds\n");
+}
+
+static void version(void) {
+    printf("memuse %s\n", VERSION);
 }
 
 static int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
