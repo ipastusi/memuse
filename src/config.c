@@ -6,14 +6,14 @@
 
 static alloc_unit *get_new_au(void);
 
-alloc_unit *parse(const char *const cfg, const bool wrap) {
-    if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
-        fprintf(stderr, "input too long (%lu): %s\n", strlen(cfg), cfg);
+alloc_unit *parse(const char *const cfg_str, const bool wrap) {
+    if (strlen(cfg_str) + 1 > MAX_CFG_SIZE) {
+        fprintf(stderr, "input too long (%lu): %s\n", strlen(cfg_str), cfg_str);
         return NULL;
     }
 
     char in[MAX_CFG_SIZE];
-    strncpy(in, cfg, MAX_CFG_SIZE);
+    strncpy(in, cfg_str, MAX_CFG_SIZE);
 
     const char delim[] = "|";
     alloc_unit *first_au = NULL;

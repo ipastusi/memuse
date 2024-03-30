@@ -12,7 +12,7 @@ typedef struct alloc_unit {
     struct alloc_unit *next;
 } alloc_unit;
 
-alloc_unit *parse(const char *const cfg, bool wrap);
+alloc_unit *parse(const char *const cfg_str, bool wrap);
 
 void unallocate_cfg(alloc_unit *cfg);
 

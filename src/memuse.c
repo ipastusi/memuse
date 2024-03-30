@@ -10,6 +10,8 @@ static alloc_unit *cfg;
 static void *memory;
 static bool allocated = false;
 
+static int run(const char *cfg_str, bool is_mb, bool wrap);
+
 static int allocate(unsigned int size, unsigned int sec, bool is_mb);
 
 static void unallocate(void);
@@ -19,9 +21,15 @@ static void int_handler(int sig);
 int main(void) {
     signal(SIGINT, int_handler);
 
+    const char cfg_str[] = "1:1|2:1|3:1";
     const bool is_mb = 0;
     const bool wrap = false;
-    cfg = parse("1:1|2:1|3:1", wrap);
+
+    run(cfg_str, is_mb, wrap);
+}
+
+static int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
+    cfg = parse(cfg_str, wrap);
     if (cfg == NULL) exit(EXIT_FAILURE);
     const alloc_unit *current = cfg;
 
