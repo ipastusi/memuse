@@ -22,7 +22,7 @@ alloc_unit *parse(const char *const cfg) {
     alloc_unit *first_au = NULL;
     alloc_unit *last_au = NULL;
 
-    char *token = strtok(in, delim);
+    const char *token = strtok(in, delim);
     while (token != NULL) {
         alloc_unit *const new_au = get_new_au();
         if (new_au == NULL) return NULL;
@@ -89,7 +89,7 @@ static alloc_unit *get_new_au(void) {
 }
 
 static int *allocate_int(void) {
-    int *i = malloc(sizeof(int));
+    int *const i = malloc(sizeof(int));
     if (i == NULL) {
         puts("memory allocation error");
         return NULL;

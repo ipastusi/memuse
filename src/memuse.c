@@ -22,7 +22,7 @@ int main(void) {
     const bool is_mb = 0;
     cfg = parse("1:1|2:1|3:1");
     if (cfg == NULL) exit(2);
-    alloc_unit *current = cfg;
+    const alloc_unit *current = cfg;
 
     while (true) {
         allocate(current->size, current->sec, is_mb);
@@ -39,16 +39,16 @@ int main(void) {
 
 static void allocate(const unsigned int size, const unsigned int sec, const bool is_mb) {
     const unsigned int bytes = is_mb ? size * 1000 * 1000 : size * 1024 * 1024;
-    const char* const unit = is_mb ? "MB" : "MiB";
+    const char *const unit = is_mb ? "MB" : "MiB";
     printf("allocating memory size: %u%s for %us\n", size, unit, sec);
     memory = malloc(bytes);
-    allocated = true;
 
     if (memory == NULL) {
         puts("memory allocation error");
         exit(3);
     }
 
+    allocated = true;
     mlock(memory, bytes);
     sleep(sec);
 }
