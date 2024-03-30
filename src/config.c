@@ -1,15 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "config.h"
 
 static alloc_unit *get_new_au(void);
 
-static int *allocate_int(void);
-
-static void free_int(int *i);
-
-alloc_unit *parse(const char *const cfg) {
+alloc_unit *parse(const char *const cfg, const bool wrap) {
     if (strlen(cfg) + 1 > MAX_CFG_SIZE) {
         printf("input too long (%lu): %s\n", strlen(cfg), cfg);
         return NULL;
@@ -22,13 +19,15 @@ alloc_unit *parse(const char *const cfg) {
     alloc_unit *first_au = NULL;
     alloc_unit *last_au = NULL;
 
+    int units = 0;
     const char *token = strtok(in, delim);
     while (token != NULL) {
+        units++;
         alloc_unit *const new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *const a = allocate_int();
-        int *const b = allocate_int();
+        int *const a = &(int) {0};
+        int *const b = &(int) {0};
         int res = sscanf(token, "%d:%d", a, b);
 
         if (res != 2) {
@@ -51,9 +50,6 @@ alloc_unit *parse(const char *const cfg) {
             return NULL;
         }
 
-        free_int(a);
-        free_int(b);
-
         if (first_au == NULL) {
             first_au = new_au;
             last_au = first_au;
@@ -64,13 +60,21 @@ alloc_unit *parse(const char *const cfg) {
 
         token = strtok(NULL, delim);
     }
-    if (first_au == NULL) puts("parsed config is empty");
+
+    if (first_au == NULL) {
+        puts("parsed config is empty");
+    } else {
+        first_au->units = units;
+        if (wrap) last_au->next = first_au;
+    }
     return first_au;
 }
 
 void unallocate_cfg(alloc_unit *cfg) {
     alloc_unit *current = cfg;
-    while (current != NULL) {
+    if (current == NULL) return;
+    unsigned int units = cfg->units;
+    for (unsigned int i = 0; i < units; i++) {
         alloc_unit *prev = current;
         current = current->next;
         free(prev);
@@ -86,18 +90,4 @@ static alloc_unit *get_new_au(void) {
     }
     au->next = NULL;
     return au;
-}
-
-static int *allocate_int(void) {
-    int *const i = malloc(sizeof(int));
-    if (i == NULL) {
-        puts("memory allocation error");
-        return NULL;
-    }
-    return i;
-}
-
-static void free_int(int *i) {
-    free(i);
-    i = NULL;
 }

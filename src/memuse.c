@@ -20,7 +20,8 @@ int main(void) {
     signal(SIGINT, int_handler);
 
     const bool is_mb = 0;
-    cfg = parse("1:1|2:1|3:1");
+    const bool wrap = false;
+    cfg = parse("1:1|2:1|3:1", wrap);
     if (cfg == NULL) exit(2);
     const alloc_unit *current = cfg;
 
