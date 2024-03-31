@@ -1,6 +1,6 @@
-# memuse
+# Memuse
 
-CLI tool simulating memory consumption.
+Multi-platform CLI tool for simulating memory consumption.
 
 ## Quick start guide
 
@@ -18,10 +18,11 @@ memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 se
 memuse -c '100:10' -m           Allocate 100MB for 10 seconds
 ```
 
-See GitHub Actions for the details of build process and list of operating systems memuse is tested against.
+See GitHub Actions for details of build process and list of operating systems Memuse is tested against.
 
 ## Errors
 
 Common error messages:
+
 - `memory allocation error` - check if there is enough free memory available.
 - `memory locking error` - use `ulimit -l` to check the maximum number of bytes of memory that may be locked into RAM.
