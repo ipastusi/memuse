@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -66,7 +67,7 @@ static int allocate(const unsigned int size, const unsigned int sec, const bool 
         if (getrlimit(RLIMIT_MEMLOCK, &r) != 0) {
             fprintf(stderr, "unable to determine memory locking limits\n");
         } else {
-            fprintf(stderr, "memory requested: %d. memory locking limits: %lu (soft), %lu (hard)\n", bytes, r.rlim_cur, r.rlim_max);
+            fprintf(stderr, "memory requested: %d. memory locking limits: %"PRIu64"(soft), %"PRIu64"(hard)\n", bytes, r.rlim_cur, r.rlim_max);
         }
 
         return EXIT_FAILURE;
