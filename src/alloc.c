@@ -15,7 +15,7 @@ static void unallocate(void);
 
 int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
     cfg = parse(cfg_str, wrap);
-    if (cfg == NULL) exit(EXIT_FAILURE);
+    if (cfg == NULL) return EXIT_FAILURE;
     const alloc_unit *current = cfg;
 
     int alloc_res;

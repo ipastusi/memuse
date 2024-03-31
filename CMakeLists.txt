@@ -13,9 +13,19 @@ add_executable(memuse
         src/config.h)
 
 enable_testing()
-add_executable(unit_tests
-        test/unit_tests.c
+
+add_executable(config_test
+        test/config_test.c
         src/config.c
         src/config.h)
-add_test(NAME unit_tests
-        COMMAND $<TARGET_FILE:unit_tests>)
+add_test(NAME config_test
+        COMMAND $<TARGET_FILE:config_test>)
+
+add_executable(alloc_test
+        test/alloc_test.c
+        src/alloc.c
+        src/alloc.h
+        src/config.c
+        src/config.h)
+add_test(NAME alloc_test
+        COMMAND $<TARGET_FILE:alloc_test>)
