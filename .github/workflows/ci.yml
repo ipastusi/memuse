@@ -1,4 +1,4 @@
-name: memuse
+name: C
 on:
   push:
     branches: [ master ]

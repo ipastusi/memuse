@@ -1,5 +1,7 @@
 # Memuse
 
+[![C](https://github.com/ipastusi/memuse/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ipastusi/memuse/actions/workflows/ci.yml)
+
 Multi-platform CLI tool for simulating memory consumption.
 
 ## Quick start guide
