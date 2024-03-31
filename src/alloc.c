@@ -43,7 +43,7 @@ int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
 
     unallocate_cfg(cfg);
     allocated_cfg = false;
-    return (alloc_res != 0) ? EXIT_FAILURE : EXIT_SUCCESS;
+    return alloc_res;
 }
 
 void int_handler(const int sig) {
