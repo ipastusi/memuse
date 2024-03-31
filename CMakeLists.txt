@@ -7,6 +7,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c17 -pedantic -Wall -Wextra -Werror -O3
 
 add_executable(memuse
         src/memuse.c
+        src/alloc.c
+        src/alloc.h
         src/config.c
         src/config.h)
 
