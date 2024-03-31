@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     }
 
     signal(SIGINT, int_handler);
-    run(cfg_str, is_mb, wrap);
+    return run(cfg_str, is_mb, wrap);
 }
 
 static void help(void) {
