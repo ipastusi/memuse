@@ -8,11 +8,10 @@
 typedef struct alloc_unit {
     unsigned int size;
     unsigned int sec;
-    unsigned int units;
     struct alloc_unit *next;
 } alloc_unit;
 
-alloc_unit *parse(const char *const cfg_str, bool wrap);
+alloc_unit *parse(const char *const cfg_str);
 
 void unallocate_cfg(alloc_unit *cfg);
 

@@ -19,7 +19,7 @@ static void unallocate(void);
 static void cleanup(void);
 
 int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
-    cfg = parse(cfg_str, wrap);
+    cfg = parse(cfg_str);
     if (cfg == NULL) return EXIT_FAILURE;
     allocated_cfg = true;
     const alloc_unit *current = cfg;
@@ -34,10 +34,13 @@ int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
 
         if (current->next != NULL) {
             current = current->next;
+        } else if (wrap) {
+            current = cfg;
         } else {
             break;
         }
     }
+
     unallocate_cfg(cfg);
     allocated_cfg = false;
     return (alloc_res != 0) ? EXIT_FAILURE : EXIT_SUCCESS;

@@ -3,12 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "config.h"
 
 static alloc_unit *get_new_au(void);
 
-alloc_unit *parse(const char *const cfg_str, const bool wrap) {
+alloc_unit *parse(const char *const cfg_str) {
     if (strlen(cfg_str) + 1 > MAX_CFG_SIZE) {
         fprintf(stderr, "input too long (%lu): %s\n", strlen(cfg_str), cfg_str);
         return NULL;
@@ -21,10 +20,8 @@ alloc_unit *parse(const char *const cfg_str, const bool wrap) {
     alloc_unit *first_au = NULL;
     alloc_unit *last_au = NULL;
 
-    int units = 0;
     const char *token = strtok(in, delim);
     while (token != NULL) {
-        units++;
         alloc_unit *const new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
@@ -65,18 +62,13 @@ alloc_unit *parse(const char *const cfg_str, const bool wrap) {
 
     if (first_au == NULL) {
         fprintf(stderr, "parsed config is empty\n");
-    } else {
-        first_au->units = units;
-        if (wrap) last_au->next = first_au;
     }
     return first_au;
 }
 
 void unallocate_cfg(alloc_unit *cfg) {
     alloc_unit *current = cfg;
-    if (current == NULL) return;
-    unsigned int units = cfg->units;
-    for (unsigned int i = 0; i < units; i++) {
+    while (current != NULL) {
         alloc_unit *prev = current;
         current = current->next;
         free(prev);
