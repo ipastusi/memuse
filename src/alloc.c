@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/resource.h>
 #include "alloc.h"
 #include "config.h"
 
@@ -60,6 +61,14 @@ static int allocate(const unsigned int size, const unsigned int sec, const bool 
     allocated = true;
     if (mlock(memory, bytes) == -1) {
         fprintf(stderr, "memory locking error\n");
+
+        struct rlimit r;
+        if (getrlimit(RLIMIT_MEMLOCK, &r) != 0) {
+            fprintf(stderr, "unable to determine memory locking limits\n");
+        } else {
+            fprintf(stderr, "memory requested: %d. memory locking limits: %lu (soft), %lu (hard)\n", bytes, r.rlim_cur, r.rlim_max);
+        }
+
         return EXIT_FAILURE;
     }
     sleep(sec);
