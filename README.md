@@ -22,9 +22,14 @@ memuse -c '100:10' -m           Allocate 100MB for 10 seconds
 
 See GitHub Actions for details of build process and list of operating systems Memuse is tested against.
 
-## Errors
+## Troubleshooting
 
 Common error messages:
 
-- `memory allocation error` - check if there is enough free memory available.
-- `memory locking error` - use `ulimit -l` to check the maximum number of bytes of memory that may be locked into RAM.
+- `memory allocation error`
+  - Check if there is enough free memory available.
+  - Check `errno`.
+- `memory locking error`
+  - Use `ulimit -l` to check the maximum number of bytes of memory that may be locked into RAM.
+  - Check if there is enough free memory available.
+  - Check `errno`.
