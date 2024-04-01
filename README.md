@@ -9,9 +9,13 @@ Multi-platform CLI tool for simulating memory consumption.
 ```
 ./memuse -h
 
+-a      Ignore allocation errors
 -c      Memory allocation config
+-d      Don't lock memory after allocation, might get paged to the swap area
 -h      Print this help screen
+-l      Ignore locking errors
 -m      Use MB instead of MiB
+-s      Don't sleep on error, ignored unless used together with -a or -l
 -w      Wrap around and run in endless loop
 
 Examples:

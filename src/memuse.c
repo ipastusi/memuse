@@ -10,22 +10,38 @@ int main(int argc, char **argv) {
     const char *cfg_str = NULL;
     bool is_mb = false;
     bool wrap = false;
+    bool lock_mem = true;
+    bool ignore_alloc_err = false;
+    bool ignore_lock_err = false;
+    bool sleep_on_err = true;
 
     int c;
-    while ((c = getopt(argc, argv, "mwc:h")) != -1) {
+    while ((c = getopt(argc, argv, "ac:dhlmsw")) != -1) {
         switch (c) {
-            case 'm':
-                is_mb = true;
-                break;
-            case 'w':
-                wrap = true;
+            case 'a':
+                ignore_alloc_err = true;
                 break;
             case 'c':
                 cfg_str = optarg;
                 break;
+            case 'd':
+                lock_mem = false;
+                break;
             case 'h':
                 help();
                 exit(EXIT_SUCCESS);
+            case 'l':
+                ignore_lock_err = true;
+                break;
+            case 'm':
+                is_mb = true;
+                break;
+            case 's':
+                sleep_on_err = false;
+                break;
+            case 'w':
+                wrap = true;
+                break;
             default:
                 help();
                 exit(EXIT_FAILURE);
@@ -37,14 +53,18 @@ int main(int argc, char **argv) {
     }
 
     signal(SIGINT, int_handler);
-    return run(cfg_str, is_mb, wrap);
+    return run(cfg_str, is_mb, wrap, lock_mem, ignore_alloc_err, ignore_lock_err, sleep_on_err);
 }
 
 static void help(void) {
     printf("\n");
+    printf("-a      Ignore allocation errors\n");
     printf("-c      Memory allocation config\n");
+    printf("-d      Don't lock memory after allocation, might get paged to the swap area\n");
     printf("-h      Print this help screen\n");
+    printf("-l      Ignore locking errors\n");
     printf("-m      Use MB instead of MiB\n");
+    printf("-s      Don't sleep on error, ignored unless used together with -a or -l\n");
     printf("-w      Wrap around and run in endless loop\n");
     printf("\n");
     printf("Examples:\n");

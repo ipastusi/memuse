@@ -13,13 +13,14 @@ static void *memory;
 static bool allocated = false;
 static bool allocated_cfg = false;
 
-static int allocate(unsigned int size, unsigned int sec, bool is_mb);
+static int allocate(unsigned int size, unsigned int sec, bool is_mb, bool lock_mem, bool ignore_alloc_err, bool ignore_lock_err, bool sleep_on_err);
 
 static void unallocate(void);
 
 static void cleanup(void);
 
-int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
+int run(const char *const cfg_str, const bool is_mb, const bool wrap, const bool lock_mem, const bool ignore_alloc_err,
+        const bool ignore_lock_err, const bool sleep_on_err) {
     cfg = parse(cfg_str);
     if (cfg == NULL) return EXIT_FAILURE;
     allocated_cfg = true;
@@ -29,7 +30,7 @@ int run(const char *const cfg_str, const bool is_mb, const bool wrap) {
 
     int alloc_res;
     while (true) {
-        alloc_res = allocate(current->size, current->sec, is_mb);
+        alloc_res = allocate(current->size, current->sec, is_mb, lock_mem, ignore_alloc_err, ignore_lock_err, sleep_on_err);
         unallocate();
         if (alloc_res != 0) break;
 
@@ -56,7 +57,8 @@ size_t mb_to_b(const unsigned int size, const bool is_mb) {
     return is_mb ? size * 1000UL * 1000UL : size * 1024UL * 1024UL;
 }
 
-static int allocate(const unsigned int size, const unsigned int sec, const bool is_mb) {
+static int allocate(const unsigned int size, const unsigned int sec, const bool is_mb, const bool lock_mem, const bool ignore_alloc_err,
+                    const bool ignore_lock_err, const bool sleep_on_err) {
     const size_t bytes = mb_to_b(size, is_mb);
     const char *const unit = is_mb ? "MB" : "MiB";
     printf("allocating memory size: %u%s (%zu) for %us\n", size, unit, bytes, sec);
@@ -64,23 +66,42 @@ static int allocate(const unsigned int size, const unsigned int sec, const bool 
 
     if (memory == NULL) {
         fprintf(stderr, "memory allocation error (errno %d)\n", errno);
-        return EXIT_FAILURE;
-    }
 
-    allocated = true;
-    if (mlock(memory, bytes) != 0) {
-        fprintf(stderr, "memory locking error (errno %d)\n", errno);
-
-        struct rlimit r;
-        if (getrlimit(RLIMIT_MEMLOCK, &r) != 0) {
-            fprintf(stderr, "unable to determine memory locking limits\n");
-        } else {
-            fprintf(stderr, "memory requested: %zu. memory locking limits: %"PRIu64" (soft), %"PRIu64" (hard)\n", bytes, r.rlim_cur, r.rlim_max);
+        if (ignore_alloc_err && sleep_on_err) {
+            printf("sleeping\n");
+            sleep(sec);
+            return EXIT_SUCCESS;
+        } else if (ignore_alloc_err) {
+            return EXIT_SUCCESS;
         }
-
         return EXIT_FAILURE;
+    } else {
+        allocated = true;
+        if (lock_mem) {
+            printf("locking memory\n");
+            if (mlock(memory, bytes) != 0) {
+                fprintf(stderr, "memory locking error (errno %d)\n", errno);
+
+                struct rlimit r;
+                if (getrlimit(RLIMIT_MEMLOCK, &r) != 0) {
+                    fprintf(stderr, "unable to determine memory locking limits\n");
+                } else {
+                    fprintf(stderr, "memory requested: %zu. memory locking limits: %"PRIu64" (soft), %"PRIu64" (hard)\n", bytes, r.rlim_cur, r.rlim_max);
+                }
+
+                if (ignore_lock_err && sleep_on_err) {
+                    printf("sleeping\n");
+                    sleep(sec);
+                    return EXIT_SUCCESS;
+                } else if (ignore_lock_err) {
+                    return EXIT_SUCCESS;
+                }
+                return EXIT_FAILURE;
+            }
+        }
+        printf("sleeping\n");
+        sleep(sec);
     }
-    sleep(sec);
     return EXIT_SUCCESS;
 }
 
