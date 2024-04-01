@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,26 +52,30 @@ void int_handler(const int sig) {
     exit(EXIT_FAILURE);
 }
 
+size_t mb_to_b(const unsigned int size, const bool is_mb) {
+    return is_mb ? size * 1000UL * 1000UL : size * 1024UL * 1024UL;
+}
+
 static int allocate(const unsigned int size, const unsigned int sec, const bool is_mb) {
-    const unsigned int bytes = is_mb ? size * 1000 * 1000 : size * 1024 * 1024;
+    const size_t bytes = mb_to_b(size, is_mb);
     const char *const unit = is_mb ? "MB" : "MiB";
-    printf("allocating memory size: %u%s for %us\n", size, unit, sec);
+    printf("allocating memory size: %u%s (%zu) for %us\n", size, unit, bytes, sec);
     memory = malloc(bytes);
 
     if (memory == NULL) {
-        fprintf(stderr, "memory allocation error\n");
+        fprintf(stderr, "memory allocation error (errno %d)\n", errno);
         return EXIT_FAILURE;
     }
 
     allocated = true;
-    if (mlock(memory, bytes) == -1) {
-        fprintf(stderr, "memory locking error\n");
+    if (mlock(memory, bytes) != 0) {
+        fprintf(stderr, "memory locking error (errno %d)\n", errno);
 
         struct rlimit r;
         if (getrlimit(RLIMIT_MEMLOCK, &r) != 0) {
             fprintf(stderr, "unable to determine memory locking limits\n");
         } else {
-            fprintf(stderr, "memory requested: %d. memory locking limits: %"PRIu64"(soft), %"PRIu64"(hard)\n", bytes, r.rlim_cur, r.rlim_max);
+            fprintf(stderr, "memory requested: %zu. memory locking limits: %"PRIu64" (soft), %"PRIu64" (hard)\n", bytes, r.rlim_cur, r.rlim_max);
         }
 
         return EXIT_FAILURE;

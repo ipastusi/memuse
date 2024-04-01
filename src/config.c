@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,7 +80,7 @@ void unallocate_cfg(alloc_unit *cfg) {
 static alloc_unit *get_new_au(void) {
     alloc_unit *au = malloc(sizeof(alloc_unit));
     if (au == NULL) {
-        fprintf(stderr, "memory allocation error\n");
+        fprintf(stderr, "memory allocation error (errno %d)\n", errno);
         return NULL;
     }
     au->next = NULL;
