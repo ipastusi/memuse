@@ -67,8 +67,8 @@ static void help(void) {
     printf("-d      Don't lock memory after allocation, might get paged to the swap area\n");
     printf("-h      Print this help screen\n");
     printf("-l      Ignore locking errors\n");
-    printf("-p      Allocate specified memory size divided into parts\n");
     printf("-m      Use MB instead of MiB\n");
+    printf("-p      Allocate specified memory size divided into parts\n");
     printf("-s      Don't sleep on error, ignored unless used together with -a or -l\n");
     printf("-w      Wrap around and run in endless loop\n");
     printf("\n");
