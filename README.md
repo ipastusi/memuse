@@ -14,8 +14,8 @@ Multi-platform CLI tool for simulating memory consumption.
 -d      Don't lock memory after allocation, might get paged to the swap area
 -h      Print this help screen
 -l      Ignore locking errors
--p      Allocate specified memory size divided into parts
 -m      Use MB instead of MiB
+-p      Allocate specified memory size divided into parts
 -s      Don't sleep on error, ignored unless used together with -a or -l
 -w      Wrap around and run in endless loop
 
