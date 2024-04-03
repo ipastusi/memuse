@@ -21,7 +21,7 @@ Multi-platform CLI tool for simulating memory consumption.
 
 Examples:
 memuse -c '100:10|200:20'       Allocate 100MiB for 10 seconds, 200MiB for 20 seconds
-memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 seconds, repeat the sequence until interrupted
+memuse -c '100:10|200:20' -w    Allocate 100MiB for 10 seconds, 200MiB for 20 seconds, repeat
 memuse -c '500:10' -p 4         Allocate 500MiB split into 4 parts for 10 seconds
 memuse -c '100:10' -m           Allocate 100MB for 10 seconds
 ```
