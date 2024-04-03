@@ -4,7 +4,7 @@ project(memuse C)
 set(CMAKE_C_STANDARD 17)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c17 -pedantic -Wall -Wextra -Werror -O3 -D_FORTIFY_SOURCE=2 -g3")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c17 -pedantic -Wall -Wextra -Werror -O2 -D_FORTIFY_SOURCE=2 -g3")
 
     enable_testing()
 
