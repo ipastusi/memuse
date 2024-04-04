@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
     }
 
     signal(SIGINT, int_handler);
+    signal(SIGTERM, int_handler);
     return run(cfg_str, is_mb, wrap, lock_mem, ignore_alloc_err, ignore_lock_err, sleep_on_err, parts);
 }
 
