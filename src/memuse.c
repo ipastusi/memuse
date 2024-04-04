@@ -7,6 +7,8 @@
 static void help(void);
 
 int main(int argc, char **argv) {
+    setbuf(stdout, NULL);
+
     const char *cfg_str = NULL;
     bool is_mb = false;
     bool wrap = false;
