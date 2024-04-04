@@ -6,6 +6,8 @@ Multi-platform CLI tool for simulating memory consumption.
 
 ## Quick start guide
 
+See GitHub Actions for details of build process and list of operating systems Memuse is tested against.
+
 ```
 ./memuse -h
 
@@ -26,16 +28,35 @@ memuse -c '500:10' -p 4         Allocate 500MiB split into 4 parts for 10 second
 memuse -c '100:10' -m           Allocate 100MB for 10 seconds
 ```
 
-See GitHub Actions for details of build process and list of operating systems Memuse is tested against.
+Sample execution log:
+
+```
+./memuse -c '1024:10|2048:10|4096:10'           
+allocating memory size: 1024MiB (1x 1073741824 bytes) for 10s
+locking memory
+sleeping
+unallocating memory
+allocating memory size: 2048MiB (1x 2147483648 bytes) for 10s
+locking memory
+sleeping
+unallocating memory
+allocating memory size: 4096MiB (1x 4294967296 bytes) for 10s
+locking memory
+sleeping
+unallocating memory
+exiting...
+```
 
 ## Troubleshooting
 
-Common error messages:
+Below error messages indicate memory allocation or locking failed:
 
 - `memory allocation error`
   - Check if there is enough free memory available.
+  - Consider using `-p` option.
   - Check `errno`.
 - `memory locking error`
-  - Use `ulimit -l` to check the maximum number of bytes of memory that may be locked into RAM.
+  - Check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report, although you can also use `ulimit -l`.
   - Check if there is enough free memory available.
+  - Consider using `-p` option.
   - Check `errno`.
