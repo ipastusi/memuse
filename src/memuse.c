@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include "alloc.h"
 
+static void sig_handler(int sig);
+
+static unsigned int get_parts(const char *parts);
+
 static void help(void);
 
 int main(int argc, char **argv) {
@@ -13,29 +17,25 @@ int main(int argc, char **argv) {
     bool is_mb = false;
     bool wrap = false;
     bool lock_mem = true;
-    bool ignore_alloc_err = false;
-    bool ignore_lock_err = false;
+    bool ignore_err = false;
     bool sleep_on_err = true;
     unsigned int parts = 1;
 
     int c;
-    while ((c = getopt(argc, argv, "ac:dhlmp:sw")) != -1) {
+    while ((c = getopt(argc, argv, "c:dehmp:sw")) != -1) {
         switch (c) {
-            case 'a':
-                ignore_alloc_err = true;
-                break;
             case 'c':
                 cfg_str = optarg;
                 break;
             case 'd':
                 lock_mem = false;
                 break;
+            case 'e':
+                ignore_err = true;
+                break;
             case 'h':
                 help();
                 exit(EXIT_SUCCESS);
-            case 'l':
-                ignore_lock_err = true;
-                break;
             case 'm':
                 is_mb = true;
                 break;
@@ -58,21 +58,36 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    signal(SIGINT, int_handler);
-    signal(SIGTERM, int_handler);
-    return run(cfg_str, is_mb, wrap, lock_mem, ignore_alloc_err, ignore_lock_err, sleep_on_err, parts);
+    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
+    int res = run(cfg_str, is_mb, wrap, lock_mem, ignore_err, sleep_on_err, parts);
+    return (res == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+static void sig_handler(const int sig) {
+    fprintf(stderr, "\nreceived signal: %d\n", sig);
+    exit(EXIT_SUCCESS);
+}
+
+static unsigned int get_parts(const char *const parts) {
+    char *endprt;
+    unsigned long number = strtoul(parts, &endprt, 10);
+    if (number < 1 || number > M_PARTS) {
+        printf("-p option accepts only integer values between 1 and 8 inclusive\n");
+        exit(EXIT_FAILURE);
+    }
+    return (unsigned int) number;
 }
 
 static void help(void) {
     printf("\n");
-    printf("-a      Ignore allocation errors\n");
     printf("-c      Memory allocation config\n");
     printf("-d      Don't lock memory after allocation, might get paged to the swap area\n");
+    printf("-e      Ignore allocation and locking errors\n");
     printf("-h      Print this help screen\n");
-    printf("-l      Ignore locking errors\n");
     printf("-m      Use MB instead of MiB\n");
     printf("-p      Allocate specified memory size divided into parts\n");
-    printf("-s      Don't sleep on error, ignored unless used together with -a or -l\n");
+    printf("-s      Don't sleep on errors, ignored unless used together with -i\n");
     printf("-w      Wrap around and run in endless loop\n");
     printf("\n");
     printf("Examples:\n");

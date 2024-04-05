@@ -11,14 +11,13 @@ See GitHub Actions for details of build process and list of operating systems Me
 ```
 ./memuse -h
 
--a      Ignore allocation errors
 -c      Memory allocation config
 -d      Don't lock memory after allocation, might get paged to the swap area
+-e      Ignore allocation and locking errors
 -h      Print this help screen
--l      Ignore locking errors
 -m      Use MB instead of MiB
 -p      Allocate specified memory size divided into parts
--s      Don't sleep on error, ignored unless used together with -a or -l
+-s      Don't sleep on errors, ignored unless used together with -i
 -w      Wrap around and run in endless loop
 
 Examples:
@@ -52,11 +51,11 @@ exiting...
 Below error messages indicate memory allocation or locking failed:
 
 - `memory allocation error`
-  - Check if there is enough free memory available.
-  - Consider using `-p` option.
-  - Check `errno`.
+    - Check if there is enough free memory available.
+    - Consider using `-p` option.
+    - Check `errno`.
 - `memory locking error`
-  - Check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report, although you can also use `ulimit -l`.
-  - Check if there is enough free memory available.
-  - Consider using `-p` option.
-  - Check `errno`.
+    - Check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report, although you can also use `ulimit -l`.
+    - Check if there is enough free memory available.
+    - Consider using `-p` option.
+    - Check `errno`.

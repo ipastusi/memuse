@@ -1,7 +1,7 @@
-#include <stdbool.h>
-
 #ifndef MEMUSE_CONFIG_H
 #define MEMUSE_CONFIG_H
+
+#include <stdbool.h>
 
 #define MAX_CFG_SIZE 101
 

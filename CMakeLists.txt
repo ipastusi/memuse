@@ -20,9 +20,18 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
             src/alloc.c
             src/alloc.h
             src/config.c
-            src/config.h)
+            src/config.h
+            src/err_handler.c
+            src/err_handler.h)
     add_test(NAME alloc_test
             COMMAND $<TARGET_FILE:alloc_test>)
+
+    add_executable(err_handler_test
+            test/err_handler_test.c
+            src/err_handler.c
+            src/err_handler.h)
+    add_test(NAME err_handler_test
+            COMMAND $<TARGET_FILE:err_handler_test>)
 
 else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c17 -pedantic -Wall -Wextra -Werror -O3 -g0 -DNDEBUG")
@@ -33,4 +42,6 @@ add_executable(memuse
         src/alloc.c
         src/alloc.h
         src/config.c
-        src/config.h)
+        src/config.h
+        src/err_handler.c
+        src/err_handler.h)
