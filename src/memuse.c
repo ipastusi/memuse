@@ -83,7 +83,7 @@ static void help(void) {
     printf("\n");
     printf("-c      Memory allocation config\n");
     printf("-d      Don't lock memory after allocation, might get paged to the swap area\n");
-    printf("-e      Ignore allocation and locking errors\n");
+    printf("-e      Ignore allocation and locking errors, if possible\n");
     printf("-h      Print this help screen\n");
     printf("-m      Use MB instead of MiB\n");
     printf("-p      Allocate specified memory size divided into parts\n");

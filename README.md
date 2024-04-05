@@ -13,7 +13,7 @@ See GitHub Actions for details of build process and list of operating systems Me
 
 -c      Memory allocation config
 -d      Don't lock memory after allocation, might get paged to the swap area
--e      Ignore allocation and locking errors
+-e      Ignore allocation and locking errors, if possible
 -h      Print this help screen
 -m      Use MB instead of MiB
 -p      Allocate specified memory size divided into parts
