@@ -13,9 +13,9 @@ int main(void) {
     run_alloc("1:0|2:0", false, false, true, false, false, 1, 0);
     run_alloc("1:0", true, false, false, false, false, 1, 0);
     run_alloc("1:b", false, false, true, false, false, 1, -1);
-    run_alloc("20000:0", false, false, true, false, false, 1, -1);
-    run_alloc("20000:0", false, false, true, true, false, 1, 0);
-    run_alloc("20000:0", false, false, true, true, true, 1, 0);
+    run_alloc("16000:0", false, false, true, false, false, 1, -1);
+    run_alloc("16000:0", false, false, true, true, false, 1, 0);
+    run_alloc("16000:0", false, false, true, true, true, 1, 0);
     run_alloc("8:0", false, false, true, false, false, 8, 0);
     run_alloc("8:0", false, false, true, true, false, 8, 0);
     run_alloc("8:0", false, false, true, true, true, 8, 0);
