@@ -24,7 +24,7 @@ jobs:
       - name: DEBUG Build
         run: cmake --build ${{github.workspace}}/build
       - name: DEBUG Test
-        run: ctest --verbose
+        run: ctest --verbose --timeout 60
         working-directory: ${{github.workspace}}/build
       - name: DEBUG Run - allocation
         run: ./memuse -c '1:1|2:1|3:1'
