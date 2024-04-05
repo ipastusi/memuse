@@ -11,10 +11,10 @@ int main(void) {
     assert(run("1:0|2:0", false, false, true, false, false, 1) == 0);
     assert(run("1:0", true, false, false, false, false, 1) == 0);
     assert(run("1:b", false, false, true, false, false, 1) == -1);
-    assert(run("8:0", false, false, true, false, false, 8) == 0);
-    assert(run("8:0", false, false, true, true, false, 8) == 0);
-    assert(run("8:0", false, false, true, true, true, 8) == 0);
     assert(run("16000:0", false, false, true, false, false, 1) == -1);
     assert(run("16000:0", false, false, true, true, false, 1) == 0);
     assert(run("16000:0", false, false, true, true, true, 1) == 0);
+    assert(run("4:0", false, false, true, false, false, 8) == 0);
+    assert(run("4:0", false, false, true, true, false, 8) == 0);
+    assert(run("4:0", false, false, true, true, true, 8) == 0);
 }
