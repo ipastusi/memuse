@@ -73,7 +73,7 @@ static unsigned int get_parts(const char *const parts) {
     char *endprt;
     unsigned long number = strtoul(parts, &endprt, 10);
     if (number < 1 || number > M_PARTS) {
-        printf("-p option accepts only integer values between 1 and 8 inclusive\n");
+        fprintf(stderr, "-p option accepts only integer values between 1 and 8 inclusive\n");
         exit(EXIT_FAILURE);
     }
     return (unsigned int) number;
