@@ -17,7 +17,7 @@ See GitHub Actions for details of build process and list of operating systems Me
 -h      Print this help screen
 -m      Use MB instead of MiB
 -p      Allocate specified memory size divided into parts
--s      Don't sleep on errors, ignored unless used together with -i
+-s      Don't sleep on errors, ignored unless used together with -e
 -w      Wrap around and run in endless loop
 
 Examples:

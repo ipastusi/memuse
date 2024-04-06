@@ -87,7 +87,7 @@ static void help(void) {
     printf("-h      Print this help screen\n");
     printf("-m      Use MB instead of MiB\n");
     printf("-p      Allocate specified memory size divided into parts\n");
-    printf("-s      Don't sleep on errors, ignored unless used together with -i\n");
+    printf("-s      Don't sleep on errors, ignored unless used together with -e\n");
     printf("-w      Wrap around and run in endless loop\n");
     printf("\n");
     printf("Examples:\n");
