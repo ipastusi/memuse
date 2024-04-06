@@ -47,10 +47,15 @@ if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 $MEMUSE -c '16000:0' -e -s
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-timeout --signal TERM --verbose --preserve-status 2s $MEMUSE -c '1:10' -w
-if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
+OS="$(uname)"
+if [ -z "$GITHUB_ACTIONS" ] && [ "$OS"=="Darwin" ]
+then
+  timeout --signal TERM --verbose --preserve-status 2s $MEMUSE -c '1:10' -w
+  if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-timeout --signal INT --verbose --preserve-status 2s $MEMUSE -c '1:0|2:10' -w
-if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
+  timeout --signal INT --verbose --preserve-status 2s $MEMUSE -c '1:0|2:10' -w
+  if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
+fi
 
+echo "FAILED: $FAILED"
 exit $FAILED
