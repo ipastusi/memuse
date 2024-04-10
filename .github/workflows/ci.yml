@@ -40,4 +40,4 @@ jobs:
       - name: RELEASE Build
         run: cmake --build ${{github.workspace}}/build
       - name: RELEASE Integration tests
-        run: ./it.sh
+        run: ./integration-tests.sh
