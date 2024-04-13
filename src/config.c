@@ -10,7 +10,7 @@ static alloc_unit *get_new_au(void);
 
 alloc_unit *parse(const char *const cfg_str) {
     if (strlen(cfg_str) + 1 > MAX_CFG_SIZE) {
-        fprintf(stderr, "input too long (%lu): %s\n", strlen(cfg_str), cfg_str);
+        fprintf(stderr, "input too long (%zu): %s\n", strlen(cfg_str), cfg_str);
         return NULL;
     }
 
@@ -26,25 +26,25 @@ alloc_unit *parse(const char *const cfg_str) {
         alloc_unit *const new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *const a = &(int) {0};
-        int *const b = &(int) {0};
-        int res = sscanf(token, "%d:%d", a, b);
+        int *const size = &(int) {0};
+        int *const sec = &(int) {0};
+        int res = sscanf(token, "%d:%d", size, sec);
 
         if (res != 2) {
             fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
         }
 
-        if (*a < 0 || *b < 0) {
-            fprintf(stderr, "negative value: %d %d\n", *a, *b);
+        if (*size < 0 || *sec < 0) {
+            fprintf(stderr, "negative value: %d %d\n", *size, *sec);
             return NULL;
         } else {
-            new_au->size = *a;
-            new_au->sec = *b;
+            new_au->size = *size;
+            new_au->sec = *sec;
         }
 
         char *au_str;
-        res = asprintf(&au_str, "%u:%u", *a, *b);
+        res = asprintf(&au_str, "%u:%u", *size, *sec);
         if (res == -1 || strcmp(token, au_str) != 0) {
             fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
