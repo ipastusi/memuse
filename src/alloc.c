@@ -21,12 +21,12 @@ static void unallocate(void);
 
 static void cleanup(void);
 
-int run(const char *const cfg_str, const bool is_mb, const bool wrap, const bool lock_mem,
-        const bool ignore_err, const bool sleep_on_err, const unsigned int parts) {
+int run(char *cfg_str, bool is_mb, bool wrap, bool lock_mem,
+        bool ignore_err, bool sleep_on_err, unsigned int parts) {
     cfg = parse(cfg_str);
     if (cfg == NULL) return -1;
     allocated_cfg = true;
-    const alloc_unit *current = cfg;
+    alloc_unit *current = cfg;
 
     atexit(cleanup);
 
@@ -51,14 +51,14 @@ int run(const char *const cfg_str, const bool is_mb, const bool wrap, const bool
     return alloc_res;
 }
 
-size_t mb_to_part_size(const unsigned int size, const unsigned int parts, const bool is_mb) {
+size_t mb_to_part_size(unsigned int size, unsigned int parts, bool is_mb) {
     return is_mb ? (size * 1000UL * 1000UL) / (unsigned long) parts : (size * 1024UL * 1024UL) / (unsigned long) parts;
 }
 
-static int allocate(const unsigned int size, const unsigned int sec, const bool is_mb, const bool lock_mem,
-                    int (*const err_handler)(unsigned int, unsigned int, unsigned int), const unsigned int parts) {
-    const size_t bytes = mb_to_part_size(size, parts, is_mb);
-    const char *const unit = is_mb ? "MB" : "MiB";
+static int allocate(unsigned int size, unsigned int sec, bool is_mb, bool lock_mem,
+                    int (*err_handler)(unsigned int, unsigned int, unsigned int), unsigned int parts) {
+    size_t bytes = mb_to_part_size(size, parts, is_mb);
+    char *unit = is_mb ? "MB" : "MiB";
     printf("allocating memory size: %u%s (%ux %zu bytes) for %us\n", size, unit, parts, bytes, sec);
 
     for (unsigned int i = 0; i < parts; i++) {

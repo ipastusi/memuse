@@ -8,7 +8,7 @@
 
 static alloc_unit *get_new_au(void);
 
-alloc_unit *parse(const char *const cfg_str) {
+alloc_unit *parse(char *cfg_str) {
     if (strlen(cfg_str) + 1 > MAX_CFG_SIZE) {
         fprintf(stderr, "input too long (%zu): %s\n", strlen(cfg_str), cfg_str);
         return NULL;
@@ -17,17 +17,17 @@ alloc_unit *parse(const char *const cfg_str) {
     char in[MAX_CFG_SIZE];
     strncpy(in, cfg_str, MAX_CFG_SIZE);
 
-    const char delim[] = "|";
+    char delim[] = "|";
     alloc_unit *first_au = NULL;
     alloc_unit *last_au = NULL;
 
-    const char *token = strtok(in, delim);
+    char *token = strtok(in, delim);
     while (token != NULL) {
-        alloc_unit *const new_au = get_new_au();
+        alloc_unit *new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *const size = &(int) {0};
-        int *const sec = &(int) {0};
+        int *size = &(int) {0};
+        int *sec = &(int) {0};
         int res = sscanf(token, "%d:%d", size, sec);
 
         if (res != 2) {

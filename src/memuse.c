@@ -6,14 +6,14 @@
 
 static void sig_handler(int sig);
 
-static unsigned int get_parts(const char *parts);
+static unsigned int get_parts(char *parts);
 
 static void help(void);
 
 int main(int argc, char **argv) {
     setbuf(stdout, NULL);
 
-    const char *cfg_str = NULL;
+    char *cfg_str = NULL;
     bool is_mb = false;
     bool wrap = false;
     bool lock_mem = true;
@@ -64,12 +64,12 @@ int main(int argc, char **argv) {
     return (res == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-static void sig_handler(const int sig) {
+static void sig_handler(int sig) {
     fprintf(stderr, "\nreceived signal: %d\n", sig);
     exit(EXIT_SUCCESS);
 }
 
-static unsigned int get_parts(const char *const parts) {
+static unsigned int get_parts(char *parts) {
     char *endprt;
     unsigned long number = strtoul(parts, &endprt, 10);
     if (number < 1 || number > M_PARTS) {
