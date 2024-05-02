@@ -26,25 +26,25 @@ alloc_unit *parse(char *cfg_str) {
         alloc_unit *new_au = get_new_au();
         if (new_au == NULL) return NULL;
 
-        int *size = &(int) {0};
-        int *sec = &(int) {0};
-        int res = sscanf(token, "%d:%d", size, sec);
+        int size = 0;
+        int sec = 0;
+        int res = sscanf(token, "%d:%d", &size, &sec);
 
         if (res != 2) {
             fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
         }
 
-        if (*size < 0 || *sec < 0) {
-            fprintf(stderr, "negative value: %d %d\n", *size, *sec);
+        if (size < 0 || sec < 0) {
+            fprintf(stderr, "negative value: %d %d\n", size, sec);
             return NULL;
         } else {
-            new_au->size = *size;
-            new_au->sec = *sec;
+            new_au->size = size;
+            new_au->sec = sec;
         }
 
         char *au_str;
-        res = asprintf(&au_str, "%u:%u", *size, *sec);
+        res = asprintf(&au_str, "%u:%u", size, sec);
         if (res == -1 || strcmp(token, au_str) != 0) {
             fprintf(stderr, "incorrect format: %s\n", token);
             return NULL;
