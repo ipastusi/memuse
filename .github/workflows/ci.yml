@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: DEBUG Configure CMake
-        run: cmake -B ${{github.workspace}}/build "-DCMAKE_BUILD_TYPE=Debug"
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Debug
       - name: DEBUG Build
         run: cmake --build ${{github.workspace}}/build
       - name: DEBUG Test
@@ -36,7 +36,7 @@ jobs:
         run: rm -rf ${{github.workspace}}/build
 
       - name: RELEASE Configure CMake
-        run: cmake -B ${{github.workspace}}/build "-DCMAKE_BUILD_TYPE=Release"
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
       - name: RELEASE Build
         run: cmake --build ${{github.workspace}}/build
       - name: RELEASE Integration tests
