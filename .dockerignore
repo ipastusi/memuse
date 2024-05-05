@@ -2,7 +2,9 @@
 .cmake*/
 test/
 .gitignore
+cloudbuild.yaml
 integration-tests.sh
+kubernetes.yaml
 README.md
 todo.txt
 ubuntu.yaml

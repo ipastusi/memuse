@@ -2,5 +2,6 @@
 build/
 cmake-build-debug*/
 Testing/
-memuse
+cloudbuild.yaml
+kubernetes.yaml
 todo.txt
