@@ -1,0 +1,8 @@
+.github/
+.cmake*/
+test/
+.gitignore
+integration-tests.sh
+README.md
+todo.txt
+ubuntu.yaml
