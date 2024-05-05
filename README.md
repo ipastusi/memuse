@@ -30,7 +30,8 @@ memuse -c '100:10' -m           Allocate 100MB for 10 seconds
 Sample execution log:
 
 ```
-./memuse -c '1024:10|2048:10|4096:10'           
+./memuse -c '1024:10|2048:10|4096:10'
+starting memuse           
 allocating memory size: 1024MiB (1x 1073741824 bytes) for 10s
 locking memory
 sleeping
