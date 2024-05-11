@@ -53,3 +53,40 @@ If execution fails with `memory allocation error`, make sure there is enough fre
 
 If execution fails with `memory locking error`, check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report,
 although you can also use `ulimit -l`.
+
+## Kubernetes
+
+You can use `Dockerfile` together with the below Kubernetes pod template to run Memuse on your cluster:
+
+```yaml
+apiVersion: v1
+kind: Pod
+...
+spec:
+  containers:
+    - name: memuse
+      ...
+      args: [ "-c", "2:10|4:10", "-w" ]
+  ...
+```
+
+In this case there is no need to specify `pod.spec.containers.command`, as the container image ENTRYPOINT will be used.
+
+If you want to run Memuse and lock memory size greater than the memory locking limit of your cluster worker nodes, you might prefer to use the following pod
+template instead:
+
+```yaml
+apiVersion: v1
+kind: Pod
+...
+spec:
+  containers:
+    - name: memuse
+      ...
+      securityContext:
+        runAsUser: 0
+        capabilities:
+          drop: [ "ALL" ]
+          add: [ "SYS_RESOURCE" ]
+      command: [ "bash", "-c", "ulimit -l unlimited; ./memuse -c '400:10|800:10' -w" ]
+```
