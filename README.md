@@ -47,16 +47,11 @@ unallocating memory
 exiting...
 ```
 
-## Troubleshooting
+## Deep dive
 
-Below error messages indicate memory allocation or locking failed:
+If execution fails with `memory allocation error`, make sure there is enough free memory available, check reported `errno` or consider using `-p` option.
 
-- `memory allocation error`
-    - Check if there is enough free memory available.
-    - Consider using `-p` option.
-    - Check `errno`.
-- `memory locking error`
-    - Check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report, although you can also use `ulimit -l`.
-    - Check if there is enough free memory available.
-    - Consider using `-p` option.
-    - Check `errno`.
+If execution fails with `memory locking error`, check the maximum number of bytes of memory that may be locked into RAM. This is something Memuse will report,
+although you can also use `ulimit -l`. Memory locking is relevant if the host is configured to use swap. If your host doesn't have swap enabled, like e.g. the
+majority of Kubernetes nodes, locking is not necessary to keep the allocated memory in RAM. In such case if you disable memory locking, you don't need to worry
+about memory locking limits.
