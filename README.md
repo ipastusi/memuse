@@ -56,7 +56,7 @@ although you can also use `ulimit -l`.
 
 ## Kubernetes
 
-You can use `Dockerfile` together with the below Kubernetes pod template to run Memuse on your cluster:
+You can use the `Dockerfile` provided together with the below Kubernetes pod template to run Memuse on your cluster:
 
 ```yaml
 apiVersion: v1
@@ -70,9 +70,9 @@ spec:
   ...
 ```
 
-In this case there is no need to specify `pod.spec.containers.command`, as the container image ENTRYPOINT will be used.
+In this case there is no need to specify `pod.spec.containers.command`, as the container image `ENTRYPOINT` will be used.
 
-If you want to run Memuse and lock memory size greater than the memory locking limit of your cluster worker nodes, you might prefer to use the following pod
+If you want to run Memuse and lock memory size greater than the memory locking limit on your cluster worker nodes, you might prefer to use the following
 template instead:
 
 ```yaml
