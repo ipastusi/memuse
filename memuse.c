@@ -1,7 +1,8 @@
 /*
-    cgo's C.malloc doesn't call C malloc directly, for the same behaviour calling malloc directly from C code is required.
+    "C.malloc does not call the C library malloc directly but instead calls a Go helper function that wraps the C library malloc
+    but guarantees never to return nil. If C's malloc indicates out of memory, the helper function crashes the program"
     for more details, see: https://pkg.go.dev/cmd/cgo
-    for this reason memory interactions have been implemented in C.
+    this is not the behaviour we want. for this reason memory interactions have been implemented directly in C
 */
 
 #include <stdlib.h>
