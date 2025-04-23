@@ -1,0 +1,26 @@
+# kubernetes yaml manifest for testing memuse
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memuse-ubuntu
+  namespace: default
+  labels:
+    app: memuse-ubuntu
+spec:
+  containers:
+    - image: memuse-ubuntu
+      name: memuse-ubuntu
+      resources:
+        requests:
+          memory: "1024Mi"
+        limits:
+          memory: "1024Mi"
+      imagePullPolicy: Never
+      securityContext:
+        runAsUser: 0
+        capabilities:
+          drop: [ "ALL" ]
+          add: [ "SYS_RESOURCE" ]
+      command: [ "bash", "-c", "ulimit -l unlimited; ./memuse -c '200:20|400:20|800:20' -w" ]
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never

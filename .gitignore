@@ -1,7 +1,2 @@
 .idea/
-build/
-cmake-build-debug*/
-Testing/
-cloudbuild.yaml
-kubernetes.yaml
-todo.txt
+memuse

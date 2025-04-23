@@ -1,0 +1,23 @@
+# kubernetes yaml manifest for testing memuse
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memuse-distroless
+  namespace: default
+  labels:
+    app: memuse-distroless
+spec:
+  containers:
+    - image: memuse-distroless
+      name: memuse-distroless
+      resources:
+        requests:
+          memory: "100Mi"
+        limits:
+          memory: "100Mi"
+      imagePullPolicy: Never
+      securityContext:
+        runAsUser: 65532
+      args: [ "-c", "40:20|80:20", "-w" ]
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never

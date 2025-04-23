@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-MEMUSE='./build/memuse'
+echo "Building memuse"
+go build
+
+MEMUSE='./memuse'
 FAILED=0
 
-echo 'Running memuse integration tests...'
+echo 'Running memuse integration tests'
 
 $MEMUSE -h
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
@@ -26,27 +29,28 @@ if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 $MEMUSE -c '4:0' -p 3
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-$MEMUSE -c '4:0' -p 4 -d
+$MEMUSE -c '4:0' -p 4 -l=false
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
 $MEMUSE -c '4:0' -p 5
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-$MEMUSE -c '4:0' -p 8 -s
+$MEMUSE -c '4:0' -p 8 -s=false
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-$MEMUSE -c '4:0' -p 9
+$MEMUSE -c '4:0' -p 33
 if [ $? -ne 1 ]; then FAILED=1; echo "ERROR"; fi
 
-$MEMUSE -c '16000:0' -s
+$MEMUSE -c '16000:0' -s=false
 if [ $? -ne 1 ]; then FAILED=1; echo "ERROR"; fi
 
 $MEMUSE -c '16000:0' -e
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
-$MEMUSE -c '16000:0' -e -s
+$MEMUSE -c '16000:0' -e -s=false
 if [ $? -ne 0 ]; then FAILED=1; echo "ERROR"; fi
 
+# this won't work when running in GitHub Actions on macos
 if [ -n "$GITHUB_ACTIONS" ] && [ "$(uname)" == "Darwin" ]
 then
   echo "skipping timeout tests"

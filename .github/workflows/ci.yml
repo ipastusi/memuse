@@ -1,10 +1,13 @@
-name: C
+name: Go
 on:
   push:
     branches: [ master ]
     paths-ignore:
-      - README.md
-      - ubuntu.yaml
+      - '.*ignore'
+      - 'Dockerfile-*'
+      - 'LICENSE'
+      - '*.md'
+      - '*.yaml'
 jobs:
   build:
     runs-on: ${{ matrix.platform.os }}
@@ -23,21 +26,13 @@ jobs:
           ulimit -l
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: DEBUG Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Debug
-      - name: DEBUG Build
-        run: cmake --build ${{github.workspace}}/build
-      - name: DEBUG Test
-        run: ctest --verbose --timeout 60
-        working-directory: ${{github.workspace}}/build
-
-      - name: Clean
-        run: rm -rf ${{github.workspace}}/build
-
-      - name: RELEASE Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
-      - name: RELEASE Build
-        run: cmake --build ${{github.workspace}}/build
-      - name: RELEASE Integration tests
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.0'
+      - name: Build
+        run: go build
+      - name: Test
+        run: go test
+      - name: Integration tests
         run: ./integration-tests.sh

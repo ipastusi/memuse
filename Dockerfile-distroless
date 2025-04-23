@@ -1,0 +1,20 @@
+FROM golang:1.24.0 AS build
+
+COPY alloc.go alloc.go
+COPY cli.go cli.go
+COPY cli_test.go cli_test.go
+COPY go.mod go.mod
+COPY go.sum go.sum
+COPY main.go main.go
+COPY memuse.c memuse.c
+COPY memuse.h memuse.h
+
+RUN go test && \
+    go build
+
+FROM gcr.io/distroless/base-debian12:nonroot
+
+WORKDIR /memuse
+COPY --chown=nonroot --from=build /go/memuse memuse
+
+ENTRYPOINT [ "./memuse" ]

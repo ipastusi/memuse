@@ -1,0 +1,29 @@
+FROM golang:1.24.0 AS build
+
+COPY alloc.go alloc.go
+COPY cli.go cli.go
+COPY cli_test.go cli_test.go
+COPY go.mod go.mod
+COPY go.sum go.sum
+COPY main.go main.go
+COPY memuse.c memuse.c
+COPY memuse.h memuse.h
+
+RUN go test && \
+    go build
+
+FROM ubuntu:24.04
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y adduser && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN adduser memuse -u 11000
+USER 11000
+
+WORKDIR /memuse
+COPY --chown=memuse --from=build /go/memuse memuse
+
+ENTRYPOINT [ "./memuse" ]
