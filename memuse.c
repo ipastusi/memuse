@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
-#include <memuse.h>
+#include "memuse.h"
 
 void *memuse_alloc(size_t size) {
     void *mem = malloc(size);
