@@ -1,13 +1,6 @@
 FROM golang:1.24.0 AS build
 
-COPY alloc.go alloc.go
-COPY cli.go cli.go
-COPY cli_test.go cli_test.go
-COPY go.mod go.mod
-COPY go.sum go.sum
-COPY main.go main.go
-COPY memuse.c memuse.c
-COPY memuse.h memuse.h
+COPY *.go go.mod go.sum memuse.c memuse.h /go/
 
 RUN go test && \
     go build
