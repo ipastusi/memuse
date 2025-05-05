@@ -17,6 +17,7 @@ spec:
           memory: "1024Mi"
       imagePullPolicy: Never
       securityContext:
+        # to lift the memory locking limits with ulimit
         runAsUser: 0
         capabilities:
           drop: [ "ALL" ]
