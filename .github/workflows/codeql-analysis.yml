@@ -1,11 +1,15 @@
 name: CodeQL
-
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '.*ignore'
+      - 'Dockerfile-*'
+      - 'LICENSE'
+      - '*.md'
+      - '*.yaml'
   schedule:
     - cron: '5 0 * * 1'
-
 jobs:
   analyze:
     runs-on: ubuntu-latest
