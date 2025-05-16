@@ -1,6 +1,7 @@
 # Memuse
 
 [![Go](https://github.com/ipastusi/memuse/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ipastusi/memuse/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/ipastusi/memuse/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ipastusi/memuse/actions/workflows/codeql-analysis.yml)
 
 Go/C (cgo) application for simulating memory consumption, initially designed for investigating Kubernetes resource limits.
 
